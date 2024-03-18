@@ -1,0 +1,29 @@
+# © 2019-2024 Serokell <hi@serokell.io>
+# © 2019-2024 Lars Jellema <lars.jellema@gmail.com>
+#
+# SPDX-License-Identifier: MPL-2.0
+
+name: CI
+on:
+  push:
+    branches:
+      - main
+
+env:
+  CDN_DISTRIBUTION_ID: E13UN1J1JFIWUZ
+  CDN_BUCKET: s3://nixfmt.serokell.io
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, nix]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: deploy webdemo
+        run: |
+          nix build .#nixfmt-webdemo
+          nix shell .#awscli -c aws s3 cp --recursive result/ "$CDN_BUCKET"
+          # delete files that don't exist anymore, use `--size-only` so behavior won't depend on local file timestamps
+          nix shell .#awscli -c aws s3 sync --delete --size-only result/ "$CDN_BUCKET"
+          nix shell .#awscli -c aws cloudfront create-invalidation --distribution-id "$CDN_DISTRIBUTION_ID" --paths '/*'

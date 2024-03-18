@@ -1,0 +1,40 @@
+cabal-version:       2.0
+
+-- © 2022-2024 Serokell <hi@serokell.io>
+-- © 2022-2024 Lars Jellema <lars.jellema@gmail.com>
+--
+-- SPDX-License-Identifier: MPL-2.0
+
+name:                nixfmt-js
+version:             0.6.0
+synopsis:            Javascript interface for nixfmt
+description:
+  This package contains a Javascript interface to nixfmt, a `nix` formatter originally developed by `Serokell` and now becoming an official `nix` formatter. This interface is used in the interactive online demo located at https://nixfmt.serokell.io/.
+homepage:            https://github.com/serokell/nixfmt-website
+bug-reports:         https://github.com/serokell/nixfmt-website/issues
+license:             MPL-2.0
+license-file:        LICENSE
+author:              Lars Jellema
+maintainer:          hi@serokell.io
+copyright:           2022 Serokell, 2022 Lars Jellema
+category:            Development
+build-type:          Simple
+extra-source-files:  README.md, CHANGELOG.md
+
+executable js-interface
+  main-is: JSInterface.hs
+  ghc-options:
+    -Wall
+    -Wcompat
+    -Wincomplete-record-updates
+    -Wincomplete-uni-patterns
+    -Wredundant-constraints
+    -Wno-orphans
+  build-depends:
+    base             >= 4.12.0 && < 4.19
+    , ghcjs-base     >= 0.2.0 && < 0.3
+    -- provided by nix
+    , nixfmt
+  hs-source-dirs:    js/
+
+  default-language: Haskell2010
