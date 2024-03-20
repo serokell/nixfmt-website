@@ -19,5 +19,6 @@ jobs:
         with:
           commit_user_name: serokell-bot
           commit_user_email: operations+github@serokell.io
+          commit_author: serokell-bot <operations+github@serokell.io>
           commit_message: "Update nixfmt input"
           file_pattern: "flake.lock"
