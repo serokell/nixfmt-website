@@ -6,14 +6,21 @@
 name: CI
 on:
   push:
-    branches:
-      - main
 
 env:
   CDN_DISTRIBUTION_ID: E13UN1J1JFIWUZ
   CDN_BUCKET: s3://nixfmt.serokell.io
 
 jobs:
+  build:
+    runs-on: [self-hosted, nix]
+    if: ${{ github.ref != 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: build nixfmt-js
+        run: nix build .#nixfmt-js
+
   deploy:
     runs-on: [self-hosted, nix]
     if: ${{ github.ref == 'refs/heads/main' }}

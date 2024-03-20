@@ -31,9 +31,9 @@ executable js-interface
     -Wredundant-constraints
     -Wno-orphans
   build-depends:
-    base             >= 4.12.0 && < 4.19
-    , ghcjs-base     >= 0.2.0 && < 0.3
-    -- provided by nix
+    base             >= 4.19 && < 4.20
+    , text
+    -- the most up to date version is provided by nix
     , nixfmt
   hs-source-dirs:    js/
 
