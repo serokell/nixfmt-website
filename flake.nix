@@ -4,41 +4,47 @@
 # SPDX-License-Identifier: MPL-2.0
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
+    haskellNix.url = "github:input-output-hk/haskell.nix";
+    nixpkgs.follows = "haskellNix/nixpkgs-unstable";
     nixfmt-src.url = "github:NixOS/nixfmt";
 
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils, nixfmt-src, ...}@inputs:
+  outputs = { self, nixpkgs, haskellNix, flake-utils, nixfmt-src, ...}@inputs:
     flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ haskellNix.overlay ];
+        inherit (haskellNix) config;
+      };
 
-      inherit (pkgs) haskell lib;
+      inherit (pkgs.pkgsCross.ghcjs) haskell-nix;
 
-      ghcjsPackages = pkgs.haskell.packages.ghcjs810.override (old: {
-        overrides = (self: super: {
-          QuickCheck = haskell.lib.dontCheck super.QuickCheck;
-          tasty-quickcheck = haskell.lib.dontCheck super.tasty-quickcheck;
-          scientific = haskell.lib.dontCheck super.scientific;
-          temporary = haskell.lib.dontCheck super.temporary;
-          time-compat = haskell.lib.dontCheck super.time-compat;
-          text-short = haskell.lib.dontCheck super.text-short;
-          vector = haskell.lib.dontCheck super.vector;
-          aeson = super.aeson_1_5_6_0;
-          nixfmt = super.callCabal2nix "nixfmt" nixfmt-src {};
-        });
-      });
+      nixfmt-js = haskell-nix.cabalProject {
+        compiler-nix-name = "ghc98";
+        src = ./.;
+        pkg-def-extras = [
+          (_: {
+            # override nixfmt with a newer version
+            packages.nixfmt = {...}: (haskell-nix.cabalProject {
+              compiler-nix-name = "ghc98";
+              src = nixfmt-src;
+              # we need base version to be at least 4.19, so we're relaxing the upper bound
+              configureArgs = "--allow-newer base";
+            }).pkg-set.config.packages.nixfmt;
+          })
+        ];
+      };
 
     in {
       packages = {
-        nixfmt-js = ghcjsPackages.callCabal2nix "nixfmt" ./. { };
+        nixfmt-js = nixfmt-js.nixfmt-js.components.exes.js-interface;
         nixfmt-webdemo = pkgs.runCommandNoCC "nixfmt-webdemo" { } ''
           mkdir $out
           cp ${./js/index.html} $out/index.html
           cp ${./js/404.html} $out/404.html
-          cp ${self.packages.${system}.nixfmt-js}/bin/js-interface.jsexe/{rts,lib,out,runmain}.js $out
-          substituteInPlace $out/index.html --replace ../dist/build/js-interface/js-interface.jsexe/ ./
+          cp ${self.packages.${system}.nixfmt-js}/bin/js-interface $out/nixfmt.js
         '';
         inherit (pkgs) awscli;
       };

@@ -10,9 +10,6 @@
 <head>
   <title>nixfmt online demo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script language="javascript" src="../dist/build/js-interface/js-interface.jsexe/rts.js"></script>
-  <script language="javascript" src="../dist/build/js-interface/js-interface.jsexe/lib.js"></script>
-  <script language="javascript" src="../dist/build/js-interface/js-interface.jsexe/out.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/nix.min.js"></script>
@@ -104,7 +101,7 @@
 </head>
 
 <body>
-  <script language="javascript" src="../dist/build/js-interface/js-interface.jsexe/runmain.js" defer></script>
+  <script language="javascript" src="./nixfmt.js" defer></script>
   <textarea id="in" cols=80 spellcheck="false">
 let
 /*
@@ -191,10 +188,10 @@ in
   <pre id="probe">xxx</pre>
   <script>
     hljs.configure({ languages: ["nix"] })
-    function nixfmt(text, width = 80, filename = "<stdin>") {
+    function nixfmt(text, width = 100, filename = "<stdin>") {
       const param = { width, filename }
-      nixfmt_(text, param)
-      return { text: param.ret, err: param.err }
+      let result = window.nixfmt_(text, param)
+      return { text: result }
     }
 
     function format() {
@@ -202,7 +199,7 @@ in
         return setTimeout(format, 100)
       }
       const outWrap = document.getElementById("out-wrap")
-      let width = 80;
+      let width = 100;
       if (outWrap.style.width) {
         const fontwidth = (document.getElementById("probe").clientWidth + 1) / 3
         width = parseFloat(outWrap.style.width) / fontwidth

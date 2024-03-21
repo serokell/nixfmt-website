@@ -1,0 +1,6 @@
+-- © 2024 Serokell <hi@serokell.io>
+-- SPDX-License-Identifier: MPL-2.0
+
+packages: nixfmt-js.cabal
+-- we need base version to be at least 4.19, so we're relaxing the upper bound
+allow-newer: nixfmt:base
