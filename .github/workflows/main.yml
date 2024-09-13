@@ -21,6 +21,9 @@ jobs:
       - name: build nixfmt-js
         run: nix build .#nixfmt-js
 
+      - name: build webdemo
+        run: nix build .#nixfmt-webdemo
+
   deploy:
     runs-on: [self-hosted, nix]
     if: ${{ github.ref == 'refs/heads/main' }}
