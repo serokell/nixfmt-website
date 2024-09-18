@@ -44,7 +44,9 @@
           mkdir $out
           cp ${./js/index.html} $out/index.html
           cp ${./js/404.html} $out/404.html
-          cp ${self.packages.${system}.nixfmt-js}/bin/js-interface $out/nixfmt.js
+          ${pkgs.closurecompiler}/bin/closure-compiler --assume_function_wrapper \
+            --js ${self.packages.${system}.nixfmt-js}/bin/js-interface \
+            --js_output_file $out/nixfmt.js
         '';
         inherit (pkgs) awscli;
       };
