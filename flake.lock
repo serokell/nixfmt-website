@@ -492,11 +492,11 @@
         "flake-utils": "flake-utils_2"
       },
       "locked": {
-        "lastModified": 1767949368,
-        "narHash": "sha256-oyl+t09k+PMC4yqpxD6/4UcC3YaWHWnxe28d2JoOcuM=",
+        "lastModified": 1769635401,
+        "narHash": "sha256-x8Nw2WHP9Cp1hVEVowIuuU20qPxj3jjW7kaXY4H9Jdk=",
         "owner": "NixOS",
         "repo": "nixfmt",
-        "rev": "ccb94535e519e94b77d6bda76ac1de06e9f11284",
+        "rev": "5513ad83a6e8e203d76215ed17c9e0bccbe5b55c",
         "type": "github"
       },
       "original": {
