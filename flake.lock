@@ -474,11 +474,11 @@
         "systems": "systems_2"
       },
       "locked": {
-        "lastModified": 1779411149,
-        "narHash": "sha256-XNF4gQotDxGnUhNzXzU+5gfCU/wT908SgktzEsBxbbM=",
+        "lastModified": 1779558660,
+        "narHash": "sha256-1uvdnZFex1WvnZ6Q4FLbuudR2ssrh3XqIZBVmsmSVmc=",
         "owner": "NixOS",
         "repo": "nixfmt",
-        "rev": "1e95d6c1ea89c9f94cbc01c18828153034c245ab",
+        "rev": "be2acc9db12250a0cc4d0a1bed6216c220238f9f",
         "type": "github"
       },
       "original": {
